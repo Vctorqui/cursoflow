@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Quote, Shuffle } from 'lucide-react'
 
 const DEFAULT_MESSAGES = [
-  '¡Vamos, hoy es otro paso hacia tu meta mi amor! 🚀',
+  '¡Vamos, hoy es otro paso hacia tu meta! 🚀',
   'El conocimiento es poder, y tú estás construyendo el tuyo. 💡',
   'Cada minuto de estudio te acerca más a tus sueños. 🌟',
   'La constancia es la clave del éxito. ¡Sigue adelante! 💪',
