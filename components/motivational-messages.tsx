@@ -53,6 +53,7 @@ export function MotivationalMessages({
   })
 
   const [currentMessage, setCurrentMessage] = useState('')
+  const [showCustomization, setShowCustomization] = useState(false)
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -80,23 +81,33 @@ export function MotivationalMessages({
 
   if (compact) {
     return (
-      <Card className='border-accent/20 bg-accent/5'>
-        <CardContent className='p-4'>
-          <div className='flex items-start gap-3'>
-            <Quote className='w-5 h-5 text-accent mt-1 flex-shrink-0' />
-            <div className='flex-1'>
-              <p className='text-sm font-medium  leading-relaxed'>
-                {currentMessage}
+      <Card className='border-accent/20 bg-gradient-to-br from-accent/5 via-accent/10 to-accent/5 shadow-lg hover:shadow-xl transition-all duration-300'>
+        <CardContent className='p-6'>
+          <div className='flex items-start gap-4'>
+            <div className='flex-shrink-0'>
+              <div className='w-12 h-12 rounded-full bg-gradient-to-br from-accent/20 to-accent/30 flex items-center justify-center border border-accent/30'>
+                <Quote className='w-6 h-6 text-accent' />
+              </div>
+            </div>
+            <div className='flex-1 space-y-3'>
+              <p className='text-base font-medium leading-relaxed text-foreground italic'>
+                "{currentMessage}"
               </p>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={getRandomMessage}
-                className='mt-2 h-auto p-1 text-xs text-muted-foreground hover:text-accent-foreground transition-colors duration-200'
-              >
-                <Shuffle className='w-3 h-3 mr-1' />
-                Otro mensaje
-              </Button>
+              <div className='flex items-start flex-col justify-center'>
+                <div className='flex items-center gap-2 text-xs text-muted-foreground mb-2'>
+                  <div className='w-2 h-2 rounded-full bg-accent/40 animate-pulse'></div>
+                  <span>Mensaje motivacional</span>
+                </div>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={getRandomMessage}
+                  className='text-accent border-accent/30 hover:bg-accent/10 hover:border-accent/50 transition-all duration-200 cursor-pointer'
+                >
+                  <Shuffle className='w-3 h-3 mr-2' />
+                  Otro mensaje
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -105,29 +116,111 @@ export function MotivationalMessages({
   }
 
   return (
-    <div className='space-y-4'>
+    <div className='space-y-6'>
       {/* Current Message Display */}
-      <Card className='border-accent/20 bg-accent/5'>
-        <CardContent className='p-6'>
-          <div className='flex items-start gap-4'>
-            <Quote className='w-6 h-6 text-accent mt-1 flex-shrink-0' />
-            <div className='flex-1'>
-              <p className='text-lg font-medium leading-relaxed'>
-                {currentMessage}
-              </p>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={getRandomMessage}
-                className='mt-3 text-accent hover:text-accent-foreground transition-colors duration-200'
-              >
-                <Shuffle className='w-4 h-4 mr-2' />
-                Nuevo mensaje
-              </Button>
+      <Card className='border-accent/20 bg-gradient-to-br from-accent/5 via-accent/10 to-accent/5 shadow-lg'>
+        <CardContent className='p-8'>
+          <div className='flex items-start gap-6'>
+            <div className='flex-shrink-0'>
+              <div className='w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-accent/30 flex items-center justify-center border border-accent/30 shadow-lg'>
+                <Quote className='w-8 h-8 text-accent' />
+              </div>
+            </div>
+            <div className='flex-1 space-y-4'>
+              <div className='space-y-2'>
+                <p className='text-xl font-medium leading-relaxed text-foreground italic'>
+                  "{currentMessage}"
+                </p>
+                <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                  <div className='w-2 h-2 rounded-full bg-accent/40 animate-pulse'></div>
+                  <span>Mensaje motivacional del día</span>
+                </div>
+              </div>
+              <div className='flex items-center gap-3'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={getRandomMessage}
+                  className='text-accent border-accent/30 hover:bg-accent/10 hover:border-accent/50 transition-all duration-200 cursor-pointer'
+                >
+                  <Shuffle className='w-4 h-4 mr-2' />
+                  Nuevo mensaje
+                </Button>
+                {/* <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={() => setShowCustomization(!showCustomization)}
+                  className='text-muted-foreground hover:text-accent hover:bg-accent/10 transition-all duration-200'
+                >
+                  <span className='text-xs'>Personalizar</span>
+                </Button> */}
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Customization Section */}
+      {showCustomization && (
+        <Card className='border-accent/20 bg-gradient-to-br from-accent/5 via-accent/10 to-accent/5'>
+          <CardContent className='p-6'>
+            <div className='space-y-4'>
+              <div className='flex items-center gap-3'>
+                <div className='w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center'>
+                  <span className='text-accent text-sm'>✨</span>
+                </div>
+                <div>
+                  <h3 className='font-medium text-foreground'>Personalizar Mensajes</h3>
+                  <p className='text-sm text-muted-foreground'>Añade tus propios mensajes motivacionales</p>
+                </div>
+              </div>
+              
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-foreground'>Nuevo mensaje</label>
+                  <textarea
+                    className='w-full p-3 text-sm border border-border rounded-md bg-background resize-none'
+                    placeholder='Escribe tu mensaje motivacional aquí...'
+                    rows={3}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.ctrlKey) {
+                        // Add message logic here
+                        e.preventDefault()
+                      }
+                    }}
+                  />
+                </div>
+                <div className='space-y-2'>
+                  <label className='text-sm font-medium text-foreground'>Mensajes guardados</label>
+                  <div className='max-h-32 overflow-y-auto space-y-2'>
+                    {messages.slice(0, 5).map((message, index) => (
+                      <div key={index} className='text-xs text-muted-foreground p-2 bg-background/50 rounded border'>
+                        {message.length > 50 ? `${message.substring(0, 50)}...` : message}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className='flex gap-2 pt-2'>
+                <Button
+                  size='sm'
+                  className='bg-accent hover:bg-accent/90 text-accent-foreground'
+                >
+                  Añadir Mensaje
+                </Button>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  onClick={() => setShowCustomization(false)}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }
