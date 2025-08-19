@@ -44,39 +44,65 @@ export function MotivationalMessages({
   onMessageSelect,
   compact = false,
 }: MotivationalMessagesProps) {
-  const [messages, setMessages] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('cursoflow-motivational-messages')
-      return saved ? JSON.parse(saved) : DEFAULT_MESSAGES
-    }
-    return DEFAULT_MESSAGES
-  })
-
+  const [messages, setMessages] = useState<string[]>(DEFAULT_MESSAGES)
   const [currentMessage, setCurrentMessage] = useState('')
   const [showCustomization, setShowCustomization] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Handle hydration safely
+  useEffect(() => {
+    setIsMounted(true)
+    const saved = localStorage.getItem('cursoflow-motivational-messages')
+    if (saved) {
+      try {
+        const parsedMessages = JSON.parse(saved)
+        setMessages(parsedMessages)
+      } catch (error) {
+        console.log('Error loading motivational messages:', error)
+      }
+    }
+  }, [])
 
   useEffect(() => {
-    if (messages.length > 0) {
-      const randomMessage =
-        messages[Math.floor(Math.random() * messages.length)]
+    if (isMounted && messages.length > 0) {
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)]
       setCurrentMessage(randomMessage)
     }
-  }, [messages])
+  }, [messages, isMounted])
 
   useEffect(() => {
-    localStorage.setItem(
-      'cursoflow-motivational-messages',
-      JSON.stringify(messages)
-    )
-  }, [messages])
+    if (isMounted) {
+      localStorage.setItem('cursoflow-motivational-messages', JSON.stringify(messages))
+    }
+  }, [messages, isMounted])
 
   const getRandomMessage = () => {
     if (messages.length > 0) {
-      const randomMessage =
-        messages[Math.floor(Math.random() * messages.length)]
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)]
       setCurrentMessage(randomMessage)
       onMessageSelect?.(randomMessage)
     }
+  }
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!isMounted) {
+    return (
+      <Card className='border-accent/20 bg-gradient-to-br from-accent/5 via-accent/10 to-accent/5 shadow-lg'>
+        <CardContent className='p-6'>
+          <div className='flex items-start gap-4'>
+            <div className='flex-shrink-0'>
+              <div className='w-12 h-12 rounded-full bg-gradient-to-br from-accent/20 to-accent/30 flex items-center justify-center border border-accent/30'>
+                <Quote className='w-6 h-6 text-accent' />
+              </div>
+            </div>
+            <div className='flex-1 space-y-3'>
+              <div className='h-4 bg-muted rounded animate-pulse'></div>
+              <div className='h-3 bg-muted rounded animate-pulse w-2/3'></div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   if (compact) {
