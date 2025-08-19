@@ -174,12 +174,15 @@ export function PomodoroTimer({ onSessionComplete, courseName, onTimerStart, onT
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">1 minuto</SelectItem>
+                <SelectItem value="5">5 minutos</SelectItem>
+                <SelectItem value="10">10 minutos</SelectItem>
+                <SelectItem value="15">15 minutos</SelectItem>
                 <SelectItem value="25">25 minutos (Pomodoro)</SelectItem>
                 <SelectItem value="30">30 minutos</SelectItem>
                 <SelectItem value="45">45 minutos</SelectItem>
                 <SelectItem value="60">60 minutos</SelectItem>
                 <SelectItem value="90">90 minutos</SelectItem>
+                <SelectItem value="120">120 minutos</SelectItem>
               </SelectContent>
             </Select>
           </div>

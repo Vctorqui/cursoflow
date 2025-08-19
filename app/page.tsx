@@ -34,6 +34,7 @@ import {
   Lock,
   Edit,
   Trash2,
+  Eye,
 } from 'lucide-react'
 import { PomodoroTimer } from '@/components/pomodoro-timer'
 import { MotivationalMessages } from '@/components/motivational-messages'
@@ -104,6 +105,12 @@ export default function CursoFlowApp() {
 
   const [activeTab, setActiveTab] = useState('courses')
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [showShowCourseModal, setShowShowCourseModal] = useState(false)
+
+  const handleShowCourse = (course: Course) => {
+    setSelectedCourse(course)
+    setShowShowCourseModal(true)
+  }
 
   useEffect(() => {
     localStorage.setItem('cursoflow-courses', JSON.stringify(courses))
@@ -423,6 +430,14 @@ export default function CursoFlowApp() {
                             <Button
                               variant='ghost'
                               size='sm'
+                              onClick={() => handleShowCourse(course)}
+                              className='h-8 w-8 p-0 hover:bg-muted'
+                            >
+                              <Eye className='w-4 h-4 text-muted-foreground hover:text-primary' />
+                            </Button>
+                            <Button
+                              variant='ghost'
+                              size='sm'
                               onClick={() => handleEditCourse(course)}
                               className='h-8 w-8 p-0 hover:bg-muted'
                             >
@@ -714,6 +729,80 @@ export default function CursoFlowApp() {
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Show Course Modal */}
+        <Dialog open={showShowCourseModal} onOpenChange={setShowShowCourseModal}>
+          <DialogContent className='max-w-2xl'>
+            <DialogHeader>
+              <DialogTitle className='font-serif text-xl flex items-center gap-2'>
+                <BookOpen className='w-5 h-5 text-primary' />
+                Detalles del Curso
+              </DialogTitle>
+              <DialogDescription>
+                Visualiza la información detallada de tu curso "{selectedCourse?.name}"
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className='space-y-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='show-name'>Nombre del Curso</Label>
+                <Input
+                  id='show-name'
+                  value={selectedCourse?.name}
+                  disabled
+                  className='bg-muted'
+                />
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='show-description'>Descripción</Label>
+                <Textarea
+                  id='show-description'
+                  value={selectedCourse?.description}
+                  disabled
+                  className='bg-muted'
+                  rows={3}
+                />
+              </div>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className='space-y-2'>
+                  <Label htmlFor='show-duration'>Duración</Label>
+                  <Input
+                    id='show-duration'
+                    value={selectedCourse?.duration + ' semanas'}
+                    disabled
+                    className='bg-muted'
+                  />
+                </div>
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='show-frequency'>Frecuencia</Label>
+                <Input
+                  id='show-frequency'
+                  value={selectedCourse?.frequency + ' ve' + (selectedCourse?.frequency && selectedCourse?.frequency > 1 ? 'ces' : 'z') + ' por semana'}
+                  disabled
+                  className='bg-muted'
+                />
+              </div>
+
+              {selectedCourse?.schedule && (
+                <div className='space-y-2'>
+                  <Label htmlFor='show-schedule'>Horario</Label>
+                  <Input
+                    id='show-schedule'
+                    value={selectedCourse.schedule}
+                    disabled
+                    className='bg-muted'
+                  />
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        
 
         {/* Edit Course Modal */}
         <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
