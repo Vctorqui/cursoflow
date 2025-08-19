@@ -46,7 +46,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { ThemeToggle } from '@/components/theme-toggle'
 
@@ -739,7 +738,7 @@ export default function CursoFlowApp() {
                 Detalles del Curso
               </DialogTitle>
               <DialogDescription>
-                Visualiza la información detallada de tu curso "{selectedCourse?.name}"
+                Visualiza la información detallada de tu curso &quot;{selectedCourse?.name}&quot;
               </DialogDescription>
             </DialogHeader>
 
@@ -813,7 +812,7 @@ export default function CursoFlowApp() {
                 Editar Curso
               </DialogTitle>
               <DialogDescription>
-                Modifica la información de tu curso "{editingCourse?.name}"
+                Modifica la información de tu curso &quot;{editingCourse?.name}&quot;
               </DialogDescription>
             </DialogHeader>
 
@@ -942,8 +941,8 @@ export default function CursoFlowApp() {
                 Confirmar Eliminación
               </DialogTitle>
               <DialogDescription>
-                ¿Estás seguro de que quieres eliminar el curso "
-                {courseToDelete?.name}"?
+                ¿Estás seguro de que quieres eliminar el curso &quot;
+                {courseToDelete?.name}&quot;?
               </DialogDescription>
             </DialogHeader>
 

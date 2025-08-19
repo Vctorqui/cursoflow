@@ -117,7 +117,7 @@ export function MotivationalMessages({
             </div>
             <div className='flex-1 space-y-3'>
               <p className='text-base font-medium leading-relaxed text-foreground italic'>
-                "{currentMessage}"
+              &quot;{currentMessage}&quot;
               </p>
               <div className='flex items-start flex-col justify-center'>
                 <div className='flex items-center gap-2 text-xs text-muted-foreground mb-2'>
@@ -155,7 +155,7 @@ export function MotivationalMessages({
             <div className='flex-1 space-y-4'>
               <div className='space-y-2'>
                 <p className='text-xl font-medium leading-relaxed text-foreground italic'>
-                  "{currentMessage}"
+                  &quot;{currentMessage}&quot;
                 </p>
                 <div className='flex items-center gap-2 text-sm text-muted-foreground'>
                   <div className='w-2 h-2 rounded-full bg-accent/40 animate-pulse'></div>
