@@ -187,13 +187,15 @@ export function PomodoroTimer({ onSessionComplete, courseName, onTimerStart, onT
           {/* Duration Selector - Solo mostrar si no está completado */}
           {!isCompleted && (
             <div className='space-y-2'>
-              <label className='text-sm font-medium'>Duración de la sesión</label>
+              <label htmlFor="duration-selector" className="text-sm font-medium">
+                Duración de la sesión
+              </label>
               <Select
                 value={duration.toString()}
                 onValueChange={(value) => setDuration(Number.parseInt(value))}
                 disabled={isRunning}
               >
-                <SelectTrigger>
+                <SelectTrigger id="duration-selector" aria-label={`Seleccionar duración de la sesión. Actualmente seleccionado: ${duration} minutos`}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -214,8 +216,8 @@ export function PomodoroTimer({ onSessionComplete, courseName, onTimerStart, onT
           {/* Circular Timer - Solo mostrar si no está completado */}
           {!isCompleted && (
             <div className='flex justify-center'>
-              <div className='relative w-48 h-48'>
-                <svg className='w-full h-full transform -rotate-90' viewBox='0 0 200 200'>
+              <div className="relative w-48 h-48" role="progressbar" aria-label={`Temporizador circular. ${formatTime(timeLeft)} restantes de ${duration} minutos`} aria-valuenow={timeLeft} aria-valuemin={0} aria-valuemax={duration * 60}>
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 200 200" aria-hidden="true">
                   {/* Background circle */}
                   <circle
                     cx="100"
@@ -262,18 +264,28 @@ export function PomodoroTimer({ onSessionComplete, courseName, onTimerStart, onT
                   onClick={handleStart}
                   className="bg-primary hover:bg-primary/90"
                   disabled={timeLeft === 0}
+                  aria-label={`Iniciar temporizador de ${duration} minutos`}
                 >
                   <Play className="w-4 h-4 mr-2" />
                   Iniciar
                 </Button>
               ) : (
-                <Button onClick={handlePause} variant="outline">
+                <Button 
+                  onClick={handlePause} 
+                  variant="outline"
+                  aria-label="Pausar temporizador"
+                >
                   <Pause className="w-4 h-4 mr-2" />
                   Pausar
                 </Button>
               )}
 
-              <Button onClick={handleReset} variant="outline" disabled={timeLeft === duration * 60 && !isRunning}>
+              <Button 
+                onClick={handleReset} 
+                variant="outline" 
+                disabled={timeLeft === duration * 60 && !isRunning}
+                aria-label="Reiniciar temporizador"
+              >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reiniciar
               </Button>
@@ -309,6 +321,7 @@ export function PomodoroTimer({ onSessionComplete, courseName, onTimerStart, onT
                     variant="outline" 
                     size="sm"
                     className="border-accent/30 text-accent hover:bg-accent/10"
+                    aria-label="Iniciar una nueva sesión de estudio sin descanso"
                   >
                     <RotateCcw className="w-4 h-4 mr-2" />
                     Iniciar Nueva Sesión

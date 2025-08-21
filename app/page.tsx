@@ -434,6 +434,7 @@ export default function CursoFlowApp() {
                 onClick={() => setShowCreateModal(true)}
                 className='bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer'
                 disabled={isTimerRunning}
+                aria-label={isTimerRunning ? 'No se puede crear curso durante una sesión activa' : 'Crear nuevo curso'}
               >
                 <Plus className='w-4 h-4 mr-2' />
                 <span className='hidden sm:inline'>Nuevo Curso</span>
@@ -527,6 +528,7 @@ export default function CursoFlowApp() {
                     <Button
                       onClick={() => setShowCreateModal(true)}
                       className='bg-primary hover:bg-primary/90 cursor-pointer'
+                      aria-label='Registrar tu primer curso para comenzar a estudiar'
                     >
                       <Plus className='w-4 h-4 mr-2' />
                       Registrar Primer Curso
@@ -562,6 +564,7 @@ export default function CursoFlowApp() {
                                         size='sm'
                                         onClick={() => handleShowCourse(course)}
                                         className='h-8 w-8 p-0'
+                                        aria-label={`Ver detalles del curso ${course.name}`}
                                       >
                                         <Eye className='w-4 h-4' />
                                       </Button>
@@ -579,6 +582,7 @@ export default function CursoFlowApp() {
                                         size='sm'
                                         onClick={() => handleEditCourse(course)}
                                         className='h-8 w-8 p-0 hover:bg-muted'
+                                        aria-label={`Editar curso ${course.name}`}
                                       >
                                         <Edit className='w-4 h-4' />
                                       </Button>
@@ -598,6 +602,7 @@ export default function CursoFlowApp() {
                                           handleDeleteCourse(course.id)
                                         }
                                         className='h-8 w-8 p-0 hover:bg-muted hover:text-destructive'
+                                        aria-label={`Eliminar curso ${course.name}`}
                                       >
                                         <Trash2 className='w-4 h-4' />
                                       </Button>
@@ -617,7 +622,7 @@ export default function CursoFlowApp() {
                                           addCourseToGoogleCalendar(course)
                                         }
                                         className='h-8 w-8 p-0'
-                                        title='Agregar a Google Calendar'
+                                        aria-label={`Agregar curso ${course.name} a Google Calendar`}
                                       >
                                         <Calendar className='w-4 h-4' />
                                       </Button>
@@ -642,7 +647,11 @@ export default function CursoFlowApp() {
                                 {course.progress}%
                               </span>
                             </div>
-                            <Progress value={course.progress} className='h-2' />
+                            <Progress 
+                              value={course.progress} 
+                              className='h-2' 
+                              aria-label={`Progreso del curso ${course.name}: ${course.progress}% completado`}
+                            />
                           </div>
 
                           <div className='grid grid-cols-2 gap-4 text-sm'>
@@ -672,6 +681,7 @@ export default function CursoFlowApp() {
                               className='w-full bg-primary disabled:bg-primary/90 '
                               size='sm'
                               onClick={() => {}}
+                              aria-label={`Curso ${course.name} completado al 100%`}
                             >
                               <Check className='w-4 h-4 mr-2' />
                               Curso Completado
@@ -683,6 +693,7 @@ export default function CursoFlowApp() {
                                   className='w-full bg-primary hover:bg-primary/90 cursor-pointer'
                                   size='sm'
                                   onClick={() => startStudySession(course)}
+                                  aria-label={`Iniciar sesión de estudio para el curso ${course.name}`}
                                 >
                                   <Play className='w-4 h-4 mr-2' />
                                   Iniciar Sesión
@@ -695,6 +706,7 @@ export default function CursoFlowApp() {
                                   onClick={() =>
                                     addCourseToGoogleCalendar(course)
                                   }
+                                  aria-label={`Agregar curso ${course.name} a Google Calendar`}
                                 >
                                   <Calendar className='w-4 h-4 mr-2' />
                                   Agregar a Google Calendar
@@ -758,6 +770,7 @@ export default function CursoFlowApp() {
                     <Button
                       onClick={() => setShowCreateModal(true)}
                       className='bg-primary hover:bg-primary/90 cursor-pointer'
+                      aria-label='Registrar un curso para poder usar el temporizador de estudio'
                     >
                       <Plus className='w-4 h-4 mr-2' />
                       Registrar Curso
@@ -923,6 +936,7 @@ export default function CursoFlowApp() {
                     <Button
                       onClick={handleAddCourse}
                       className='bg-primary hover:bg-primary/90'
+                      aria-label='Guardar y registrar el nuevo curso'
                     >
                       <BookOpen className='w-4 h-4 mr-2' />
                       Registrar Curso
@@ -940,6 +954,7 @@ export default function CursoFlowApp() {
                           createdAt: getDateToday(),
                         })
                       }}
+                      aria-label='Cancelar la creación del curso'
                     >
                       Cancelar
                     </Button>
@@ -1038,6 +1053,7 @@ export default function CursoFlowApp() {
                     <Button
                       onClick={() => addCourseToGoogleCalendar(selectedCourse!)}
                       className='bg-primary hover:bg-primary/90'
+                      aria-label={`Agregar curso ${selectedCourse?.name} a Google Calendar`}
                     >
                       <Calendar className='w-4 h-4 mr-2' />
                       Agregar a Google Calendar
@@ -1045,6 +1061,7 @@ export default function CursoFlowApp() {
                     <Button
                       variant='outline'
                       onClick={() => setShowShowCourseModal(false)}
+                      aria-label='Cerrar la vista de detalles del curso'
                     >
                       Cerrar
                     </Button>
@@ -1159,6 +1176,7 @@ export default function CursoFlowApp() {
                     <Button
                       onClick={handleUpdateCourse}
                       className='bg-primary hover:bg-primary/90'
+                      aria-label='Guardar los cambios realizados al curso'
                     >
                       <BookOpen className='w-4 h-4 mr-2' />
                       Actualizar Curso
@@ -1177,6 +1195,7 @@ export default function CursoFlowApp() {
                           createdAt: getDateToday(),
                         })
                       }}
+                      aria-label='Cancelar la edición del curso'
                     >
                       Cancelar
                     </Button>
@@ -1216,6 +1235,7 @@ export default function CursoFlowApp() {
                       onClick={confirmDeleteCourse}
                       variant='destructive'
                       className='flex-1'
+                      aria-label={`Confirmar eliminación del curso ${courseToDelete?.name}`}
                     >
                       <Trash2 className='w-4 h-4 mr-2' />
                       Eliminar Curso
@@ -1227,6 +1247,7 @@ export default function CursoFlowApp() {
                         setCourseToDelete(null)
                       }}
                       className='flex-1'
+                      aria-label='Cancelar la eliminación del curso'
                     >
                       Cancelar
                     </Button>

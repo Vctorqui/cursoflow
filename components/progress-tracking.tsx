@@ -368,7 +368,11 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
                     <div className="w-12 text-sm text-muted-foreground font-medium">{day.day}</div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <Progress value={(day.minutes / maxMinutes) * 100} className="flex-1 h-3" />
+                        <Progress 
+                          value={(day.minutes / maxMinutes) * 100} 
+                          className="flex-1 h-3" 
+                          aria-label={`Actividad del ${day.day}: ${day.minutes} minutos de ${maxMinutes} minutos máximos`}
+                        />
                         <span className="text-sm font-medium w-16 text-right">{day.minutes}min</span>
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -398,7 +402,11 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
                       <h4 className="font-medium text-foreground">{course.name}</h4>
                       <Badge variant={course.progress >= 100 ? "default" : "secondary"}>{course.progress}%</Badge>
                     </div>
-                    <Progress value={course.progress} className="h-2" />
+                    <Progress 
+                      value={course.progress} 
+                      className="h-2" 
+                      aria-label={`Progreso del curso ${course.name}: ${course.progress}% completado, ${course.sessionsCompleted} de ${course.totalSessions} sesiones`}
+                    />
                     <div className="flex justify-between text-sm text-muted-foreground">
                       <span>{course.sessionsCompleted} sesiones completadas</span>
                       <span>{course.totalSessions - course.sessionsCompleted} restantes</span>
