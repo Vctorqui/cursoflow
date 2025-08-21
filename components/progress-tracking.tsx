@@ -5,7 +5,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, TrendingUp, Award, Clock, Target, Flame, Trophy, Star } from "lucide-react"
+import {
+  Calendar,
+  TrendingUp,
+  Award,
+  Clock,
+  Target,
+  Flame,
+  Star,
+  Trophy,
+  Zap,
+  Sunrise,
+  BookOpen,
+} from 'lucide-react'
 
 interface StudySession {
   id: string
@@ -41,6 +53,9 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
   const [currentStreak, setCurrentStreak] = useState(0)
   const [longestStreak, setLongestStreak] = useState(0)
   const [totalStudyTime, setTotalStudyTime] = useState(0)
+  const [dailyStudyTime, setDailyStudyTime] = useState<number[]>([])
+  const [earlyMorningSessions, setEarlyMorningSessions] = useState(0)
+  const [weekendStudyStreak, setWeekendStudyStreak] = useState(0)
 
   useEffect(() => {
     calculateStats()
@@ -101,6 +116,41 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
 
     setCurrentStreak(streak)
     setLongestStreak(maxStreak)
+
+    // Calculate daily study time
+    const dailyData = new Map<string, number>()
+    sessions.forEach(session => {
+      const date = session.date.split('T')[0]
+      dailyData.set(date, (dailyData.get(date) || 0) + session.duration)
+    })
+    setDailyStudyTime(Array.from(dailyData.values()))
+
+    // Calculate early morning sessions (before 8 AM)
+    const earlySessions = sessions.filter(s => {
+      const hour = new Date(s.date).getHours()
+      return hour < 8
+    })
+    setEarlyMorningSessions(earlySessions.length)
+
+    // Calculate weekend study streak
+    let weekendCount = 0
+    let maxWeekendStreak = 0
+    const weekendSessions = sessions
+      .filter(s => s.completed)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    for (let i = 0; i < weekendSessions.length; i++) {
+      const sessionDate = new Date(weekendSessions[i].date)
+      const dayOfWeek = sessionDate.getDay()
+      
+      if (dayOfWeek === 0 || dayOfWeek === 6) { // Sunday or Saturday
+        weekendCount++
+        maxWeekendStreak = Math.max(maxWeekendStreak, weekendCount)
+      } else {
+        weekendCount = 0
+      }
+    }
+    setWeekendStudyStreak(maxWeekendStreak)
   }
 
   const checkAchievements = () => {
@@ -145,6 +195,46 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
         unlocked: longestStreak >= 30,
         unlockedDate: longestStreak >= 30 ? new Date().toISOString() : undefined,
       },
+      {
+        id: "speed-learner",
+        title: "Aprendiz Veloz",
+        description: "Completa 3 cursos en un mes",
+        icon: "zap",
+        unlocked: courses.filter(c => c.progress >= 100).length >= 3,
+        unlockedDate: courses.filter(c => c.progress >= 100).length >= 3 ? new Date().toISOString() : undefined,
+      },
+      {
+        id: "marathon-runner",
+        title: "Corredor de Maratón",
+        description: "Estudia por más de 2 horas en un solo día",
+        icon: "target",
+        unlocked: Math.max(...dailyStudyTime) >= 120, // 2 hours in minutes
+        unlockedDate: Math.max(...dailyStudyTime) >= 120 ? new Date().toISOString() : undefined,
+      },
+      {
+        id: "early-bird",
+        title: "Madrugador",
+        description: "Estudia antes de las 8 AM durante 5 días",
+        icon: "sunrise",
+        unlocked: earlyMorningSessions >= 5,
+        unlockedDate: earlyMorningSessions >= 5 ? new Date().toISOString() : undefined,
+      },
+      {
+        id: "weekend-warrior",
+        title: "Guerrero de Fin de Semana",
+        description: "Estudia durante 4 fines de semana consecutivos",
+        icon: "calendar",
+        unlocked: weekendStudyStreak >= 4,
+        unlockedDate: weekendStudyStreak >= 4 ? new Date().toISOString() : undefined,
+      },
+      {
+        id: "knowledge-seeker",
+        title: "Buscador de Conocimiento",
+        description: "Registra 10 cursos diferentes",
+        icon: "book-open",
+        unlocked: courses.length >= 10,
+        unlockedDate: courses.length >= 10 ? new Date().toISOString() : undefined,
+      },
     ]
 
     setAchievements(newAchievements)
@@ -181,6 +271,10 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
       clock: Clock,
       trophy: Trophy,
       award: Award,
+      zap: Zap,
+      target: Target,
+      sunrise: Sunrise,
+      'book-open': BookOpen,
     }
     const IconComponent = icons[iconName as keyof typeof icons] || Star
     return <IconComponent className="w-6 h-6" />
