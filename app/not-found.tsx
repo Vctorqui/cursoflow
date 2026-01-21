@@ -1,14 +1,14 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/src/ui/common/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/src/ui/common/ui/card'
 import { BookOpen, Home, Search } from 'lucide-react'
-import Footer from '@/components/Footer'
+import Footer from '@/src/ui/common/Footer'
 
 const NotFound = () => {
   return (
