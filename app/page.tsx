@@ -14,7 +14,18 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/src/ui/common/ui/tabs'
-import { BookOpen, TrendingUp, Heart, Timer, Plus, Lock } from 'lucide-react'
+import {
+  BookOpen,
+  TrendingUp,
+  Heart,
+  Timer,
+  Plus,
+  Lock,
+  Download,
+  Upload,
+  Settings,
+  Database,
+} from 'lucide-react'
 
 import { useCourses } from '@/src/application/useCourses'
 import { useStudyFocus } from '@/src/application/useStudyFocus'
@@ -25,8 +36,12 @@ import { CourseForm } from '@/src/ui/courses/CourseForm'
 import { PomodoroTimer } from '@/src/ui/timer/PomodoroTimer'
 import { ProgressTracking } from '@/src/ui/progress/ProgressTracking'
 import { MotivationalMessages } from '@/src/ui/motivation/MotivationalMessages'
+import confetti from 'canvas-confetti'
 
 import { ThemeToggle } from '@/src/ui/common/theme-toggle'
+import { ThemeCustomizer } from '@/src/ui/common/ThemeCustomizer'
+import { BackupActions } from '@/src/ui/common/BackupActions'
+import { EmptyCourses } from '@/src/ui/courses/EmptyCourses'
 import Footer from '@/src/ui/common/Footer'
 import {
   Select,
@@ -35,6 +50,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/src/ui/common/ui/select'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/src/ui/common/ui/dropdown-menu'
 
 export default function CursoFlowApp() {
   const {
@@ -45,6 +68,7 @@ export default function CursoFlowApp() {
     updateCourse,
     deleteCourse,
     addSession,
+    importData,
   } = useCourses()
   const {
     selectedCourse,
@@ -59,6 +83,13 @@ export default function CursoFlowApp() {
 
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [editingCourse, setEditingCourse] = useState<Course | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
   const handleAddOrUpdate = (data: CourseInputData) => {
     if (editingCourse) {
@@ -84,6 +115,11 @@ export default function CursoFlowApp() {
       <Header
         onNewCourse={() => setShowCreateModal(true)}
         isTimerRunning={isTimerRunning}
+        courses={courses}
+        sessions={studySessions}
+        onImport={importData}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       <main className='container mx-auto px-4 py-8 flex-1'>
@@ -94,7 +130,7 @@ export default function CursoFlowApp() {
           onValueChange={setActiveTab}
           className='space-y-6'
         >
-          <TabsList className='grid w-full grid-cols-2 md:grid-cols-4 gap-2'>
+          <TabsList className='inline-flex h-12 items-center justify-center rounded-full bg-muted/50 p-1 text-muted-foreground w-auto mx-auto'>
             <TabTrigger
               value='courses'
               icon={BookOpen}
@@ -122,11 +158,14 @@ export default function CursoFlowApp() {
               <EmptyCourses onAdd={() => setShowCreateModal(true)} />
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                {courses.map((course) => (
+                {filteredCourses.map((course) => (
                   <CourseCard
                     key={course.id}
                     course={course}
-                    onShow={(c) => console.log('Show', c)}
+                    onShow={(c) => {
+                      setEditingCourse(c)
+                      setShowCreateModal(true)
+                    }}
                     onEdit={(c) => {
                       setEditingCourse(c)
                       setShowCreateModal(true)
@@ -146,9 +185,28 @@ export default function CursoFlowApp() {
               selectedCourse={selectedCourse}
               setSelectedCourse={setSelectedCourse}
               isTimerRunning={isTimerRunning}
-              onSessionComplete={(duration: number) => {
+              onSessionComplete={(duration: number, notes?: string) => {
                 if (selectedCourse) {
-                  addSession(selectedCourse.id, selectedCourse.name, duration)
+                  addSession(
+                    selectedCourse.id,
+                    selectedCourse.name,
+                    duration,
+                    notes,
+                  )
+
+                  // Celebration logic: check if this session completes the course
+                  const completedSessionsCount =
+                    studySessions.filter(
+                      (s) => s.courseId === selectedCourse.id && s.completed,
+                    ).length + 1
+
+                  if (completedSessionsCount >= selectedCourse.totalSessions) {
+                    confetti({
+                      particleCount: 150,
+                      spread: 70,
+                      origin: { y: 0.6 },
+                    })
+                  }
                 }
               }}
               onTimerStart={handleTimerStart}
@@ -182,29 +240,61 @@ export default function CursoFlowApp() {
 interface HeaderProps {
   onNewCourse: () => void
   isTimerRunning: boolean
+  courses: Course[]
+  sessions: any[]
+  onImport: (data: any) => void
+  searchQuery: string
+  onSearchChange: (query: string) => void
 }
 
-function Header({ onNewCourse, isTimerRunning }: HeaderProps) {
+function Header({
+  onNewCourse,
+  isTimerRunning,
+  courses,
+  sessions,
+  onImport,
+  searchQuery,
+  onSearchChange,
+}: HeaderProps) {
   return (
-    <header className='border-b border-border bg-card'>
-      <div className='container mx-auto px-4 py-6 flex items-center justify-between'>
-        <div>
-          <h1 className='text-3xl font-serif font-bold text-foreground'>
+    <header className='border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
+      <div className='container mx-auto px-4 h-16 flex items-center justify-between gap-4'>
+        <div className='flex items-center gap-2'>
+          <h1 className='text-2xl font-serif font-bold text-primary'>
             CursoFlow
           </h1>
-          <p className='text-muted-foreground mt-1'>
-            Tu compañero de estudio constante
+          <p className='hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest'>
+            Tu compañero de estudio
           </p>
         </div>
-        <div className='flex items-center gap-3'>
+
+        <div className='flex-1 max-w-md mx-4 hidden md:block'>
+          <div className='relative'>
+            <Plus className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground' />
+            <input
+              type='text'
+              placeholder='Buscar cursos...'
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className='w-full bg-muted/50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary outline-none transition-all'
+            />
+          </div>
+        </div>
+
+        <div className='flex items-center gap-2'>
+          <ThemeCustomizer />
           <ThemeToggle />
+          <BackupActions
+            courses={courses}
+            sessions={sessions}
+            onImport={onImport}
+          />
           <Button
             onClick={onNewCourse}
             disabled={isTimerRunning}
-            className='bg-primary'
+            className='rounded-full bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all font-semibold'
           >
-            <Plus className='w-4 h-4 mr-2' />{' '}
-            <span className='hidden sm:inline'>Nuevo Curso</span>
+            <Plus className='w-4 h-4 mr-2' /> <span>Nuevo Curso</span>
           </Button>
         </div>
       </div>
@@ -246,29 +336,11 @@ function TabTrigger({ value, icon: Icon, label, disabled }: TabTriggerProps) {
     <TabsTrigger
       value={value}
       disabled={disabled}
-      className='flex items-center gap-2 text-xs md:text-sm'
+      className='flex items-center gap-2 px-6 py-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-white transition-all text-xs md:text-sm font-medium'
     >
       <Icon className='w-3 h-3 md:w-4 md:h-4' />
       <span>{label}</span>
     </TabsTrigger>
-  )
-}
-
-interface EmptyCoursesProps {
-  onAdd: () => void
-}
-
-function EmptyCourses({ onAdd }: EmptyCoursesProps) {
-  return (
-    <div className='text-center py-12'>
-      <BookOpen className='w-16 h-16 mx-auto text-muted-foreground mb-4' />
-      <h3 className='text-xl font-serif font-semibold mb-2'>
-        ¡Comienza tu viaje!
-      </h3>
-      <Button onClick={onAdd} className='bg-primary'>
-        <Plus className='w-4 h-4 mr-2' /> Registrar Primer Curso
-      </Button>
-    </div>
   )
 }
 
