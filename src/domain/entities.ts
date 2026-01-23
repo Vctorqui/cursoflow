@@ -22,6 +22,7 @@ export const StudySessionSchema = z.object({
   date: z.string(),
   duration: z.number().positive(),
   completed: z.boolean(),
+  notes: z.string().optional(),
 })
 
 export type StudySession = z.infer<typeof StudySessionSchema>

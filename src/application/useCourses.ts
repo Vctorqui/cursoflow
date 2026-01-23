@@ -44,9 +44,10 @@ export function useCourses() {
             session.courseId === course.id && session.completed,
         ).length
 
-        const newProgress = Math.round(
-          (actualSessions / course.totalSessions) * 100,
-        )
+        const newProgress =
+          course.totalSessions > 0
+            ? Math.round((actualSessions / course.totalSessions) * 100)
+            : 0
 
         return {
           ...course,
@@ -134,6 +135,7 @@ export function useCourses() {
     courseId: string,
     courseName: string,
     duration: number,
+    notes?: string,
   ) => {
     const newSession: StudySession = {
       id: Date.now().toString(),
@@ -142,8 +144,21 @@ export function useCourses() {
       date: new Date().toISOString(),
       duration,
       completed: true,
+      notes,
     }
     setStudySessions((prev: StudySession[]) => [...prev, newSession])
+  }
+
+  const importData = (data: {
+    courses: Course[]
+    sessions: StudySession[]
+  }) => {
+    if (data.courses) setCourses(data.courses)
+    if (data.sessions) setStudySessions(data.sessions)
+    toast({
+      title: 'Datos importados',
+      description: 'Tu progreso ha sido restaurado con éxito.',
+    })
   }
 
   return {
@@ -154,5 +169,6 @@ export function useCourses() {
     updateCourse,
     deleteCourse,
     addSession,
+    importData,
   }
 }
