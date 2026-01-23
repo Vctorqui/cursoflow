@@ -78,19 +78,25 @@ export function MotivationalMessages({
 
   if (compact) {
     return (
-      <Card className='border-accent/20 bg-gradient-to-br from-accent/5 via-accent/10 to-accent/5 shadow-lg hover:shadow-xl transition-all duration-300'>
-        <CardContent className='p-6'>
-          <div className='flex items-start gap-4'>
-            <QuoteIcon size='w-12 h-12' iconSize='w-6 h-6' />
-            <div className='flex-1 space-y-3'>
-              <p className='text-base font-medium leading-relaxed text-foreground italic'>
-                &quot;{currentMessage}&quot;
-              </p>
-              <div className='flex items-start flex-col justify-center'>
-                <StatusLabel label='Mensaje motivacional' />
-                <ShuffleButton onClick={getRandomMessage} />
+      <Card className='border-none bg-gradient-to-r from-[#2d0b5e] via-[#4a148c] to-[#2d0b5e] shadow-2xl relative overflow-hidden'>
+        <div className='absolute inset-0 bg-black/20' />
+        <CardContent className='p-8 relative z-10'>
+          <div className='flex items-center gap-6'>
+            <QuoteIcon size='w-14 h-14' iconSize='w-7 h-7' />
+            <div className='flex-1 space-y-4'>
+              <div className='space-y-1'>
+                <p className='text-3xl font-serif font-medium leading-tight text-white italic'>
+                  &quot;{currentMessage}&quot;
+                </p>
+                <div className='flex items-center gap-2'>
+                  <div className='w-2 h-2 rounded-full bg-pink-500 animate-pulse' />
+                  <span className='text-[10px] text-pink-200/70 uppercase tracking-widest font-bold'>
+                    Mensaje Motivacional
+                  </span>
+                </div>
               </div>
             </div>
+            <ShuffleButton onClick={getRandomMessage} />
           </div>
         </CardContent>
       </Card>
@@ -147,9 +153,9 @@ function QuoteIcon({
   return (
     <div className='flex-shrink-0'>
       <div
-        className={`${size} rounded-full bg-gradient-to-br from-accent/20 to-accent/30 flex items-center justify-center border border-accent/30 ${glow ? 'shadow-lg' : ''}`}
+        className={`${size} rounded-2xl bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm shadow-xl`}
       >
-        <Quote className={`${iconSize} text-accent`} />
+        <Quote className={`${iconSize} text-white`} />
       </div>
     </div>
   )
@@ -173,13 +179,13 @@ function ShuffleButton({
 }) {
   return (
     <Button
-      variant='outline'
+      variant='ghost'
       size='sm'
       onClick={onClick}
-      className='text-accent border-accent/30 hover:bg-accent/10 hover:border-accent/50 transition-all duration-200 cursor-pointer'
+      className='bg-white/10 hover:bg-white/20 border-white/10 text-white rounded-2xl px-6 h-12 transition-all duration-300 backdrop-blur-md gap-3'
     >
-      <Shuffle className='w-3 h-3 mr-2' />
-      {label}
+      <Shuffle className='w-4 h-4' />
+      <span className='font-medium'>{label}</span>
     </Button>
   )
 }
