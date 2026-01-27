@@ -4,24 +4,28 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.98 0.01 240); /* Clean white with a hint of blue */
-  --foreground: oklch(0.2 0.02 260); /* Deep grey-blue for text */
-  --card: oklch(1 0 0 / 0.8);
-  --card-foreground: oklch(0.2 0.02 260);
+  --background: oklch(0.99 0.005 240); /* Slightly cleaner white */
+  --foreground: oklch(0.25 0.02 260); /* Slightly darker for better contrast */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.25 0.02 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 260);
-  --primary: oklch(0.65 0.22 45); /* Base brand orange */
+  --popover-foreground: oklch(0.25 0.02 260);
+  --primary: oklch(
+    0.6 0.18 45
+  ); /* Slightly more saturated orange for contrast */
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.94 0.02 240); /* Soft mist blue */
-  --secondary-foreground: oklch(0.2 0.02 260);
-  --muted: oklch(0.96 0.01 240);
-  --muted-foreground: oklch(0.45 0.04 240);
+  --secondary: oklch(0.96 0.01 240);
+  --secondary-foreground: oklch(0.25 0.02 260);
+  --muted: oklch(0.94 0.01 240);
+  --muted-foreground: oklch(
+    0.4 0.02 240
+  ); /* Considerably darker for accessibility */
   --accent: oklch(0.94 0.02 240);
-  --accent-foreground: oklch(0.2 0.02 260);
+  --accent-foreground: oklch(0.25 0.02 260);
   --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.91 0.01 240);
-  --input: oklch(0.91 0.01 240);
+  --border: oklch(0.88 0.01 240); /* Slightly darker border */
+  --input: oklch(0.88 0.01 240);
   --ring: var(--primary);
   --radius: 0.75rem;
 }

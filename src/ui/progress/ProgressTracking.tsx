@@ -303,7 +303,7 @@ interface WeeklyActivityProps {
 
 function WeeklyActivity({ weeklyData, maxMinutes }: WeeklyActivityProps) {
   return (
-    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden'>
+    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden border border-primary/5'>
       <CardHeader className='pb-2'>
         <CardTitle className='text-lg flex items-center gap-2 font-bold'>
           <Calendar className='w-5 h-5 text-primary' />
@@ -318,7 +318,7 @@ function WeeklyActivity({ weeklyData, maxMinutes }: WeeklyActivityProps) {
             </div>
             <div className='flex-1'>
               <div className='flex items-center gap-4 mb-1.5'>
-                <div className='flex-1 h-2 bg-white/5 rounded-full overflow-hidden'>
+                <div className='flex-1 h-2 bg-primary/10 rounded-full overflow-hidden'>
                   <div
                     className='h-full bg-primary shadow-[0_0_10px_rgba(255,122,33,0.3)] transition-all'
                     style={{ width: `${(day.minutes / maxMinutes) * 100}%` }}
@@ -342,7 +342,7 @@ function WeeklyActivity({ weeklyData, maxMinutes }: WeeklyActivityProps) {
 function CoursesProgress({ courses }: { courses: Course[] }) {
   if (courses.length === 0)
     return (
-      <div className='text-center py-20 bg-white/5 rounded-[2rem] border border-white/5'>
+      <div className='text-center py-20 bg-primary/5 rounded-[2rem] border border-primary/10'>
         <BookOpen className='w-16 h-16 mx-auto mb-4 text-muted-foreground/20' />
         <p className='text-sm font-bold uppercase tracking-widest text-muted-foreground/40'>
           No hay cursos registrados aún
@@ -351,7 +351,7 @@ function CoursesProgress({ courses }: { courses: Course[] }) {
     )
 
   return (
-    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden'>
+    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden border border-primary/5'>
       <CardHeader className='pb-2'>
         <CardTitle className='text-lg flex items-center gap-2 font-bold'>
           <TrendingUp className='w-5 h-5 text-primary' />
@@ -363,7 +363,7 @@ function CoursesProgress({ courses }: { courses: Course[] }) {
           <div key={course.id} className='space-y-4 group'>
             <div className='flex items-center justify-between'>
               <div className='space-y-1'>
-                <h4 className='font-bold text-white text-lg tracking-tight group-hover:text-primary transition-colors'>
+                <h4 className='font-bold text-foreground text-lg tracking-tight group-hover:text-primary transition-colors'>
                   {course.name}
                 </h4>
                 <p className='text-[10px] items-center flex gap-1.5 uppercase font-bold tracking-widest text-muted-foreground'>
@@ -374,7 +374,7 @@ function CoursesProgress({ courses }: { courses: Course[] }) {
                 {course.progress}%
               </div>
             </div>
-            <div className='h-3 w-full bg-white/5 rounded-full overflow-hidden'>
+            <div className='h-3 w-full bg-primary/10 rounded-full overflow-hidden'>
               <div
                 className='h-full bg-primary shadow-[0_0_10px_rgba(255,122,33,0.3)]'
                 style={{ width: `${course.progress}%` }}
@@ -398,9 +398,9 @@ function CoursesProgress({ courses }: { courses: Course[] }) {
 function AchievementsList({ achievements }: { achievements: Achievement[] }) {
   if (achievements.length === 0) {
     return (
-      <div className='text-center py-24 bg-white/5 rounded-[2rem] border border-white/5'>
+      <div className='text-center py-24 bg-primary/5 rounded-[2rem] border border-primary/10'>
         <Trophy className='w-20 h-20 mx-auto mb-6 text-muted-foreground/10' />
-        <h4 className='text-xl font-black text-white mb-2 uppercase tracking-widest opacity-50'>
+        <h4 className='text-xl font-black text-foreground mb-2 uppercase tracking-widest opacity-50'>
           Próximamente
         </h4>
         <p className='text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground/30'>
@@ -411,7 +411,7 @@ function AchievementsList({ achievements }: { achievements: Achievement[] }) {
   }
 
   return (
-    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden'>
+    <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden border border-primary/5'>
       <CardHeader className='pb-2'>
         <CardTitle className='text-lg flex items-center gap-2 font-bold'>
           <Award className='w-5 h-5 text-primary' />
@@ -422,17 +422,17 @@ function AchievementsList({ achievements }: { achievements: Achievement[] }) {
         {achievements.map((achievement) => (
           <div
             key={achievement.id}
-            className={`p-6 rounded-[1.5rem] border transition-all ${achievement.unlocked ? 'border-primary/20 bg-primary/5 shadow-xl' : 'border-white/5 bg-white/5 grayscale opacity-40'}`}
+            className={`p-6 rounded-[1.5rem] border transition-all ${achievement.unlocked ? 'border-primary/20 bg-primary/5 shadow-xl' : 'border-muted/20 bg-muted/10 grayscale opacity-40'}`}
           >
             <div className='flex items-start gap-4'>
               <div
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${achievement.unlocked ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-muted text-muted-foreground'}`}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${achievement.unlocked ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'bg-muted text-muted-foreground'}`}
               >
                 <AchievementIcon name={achievement.icon} className='w-7 h-7' />
               </div>
               <div className='flex-1 space-y-1'>
                 <h4
-                  className={`text-lg font-black tracking-tight ${achievement.unlocked ? 'text-white' : 'text-muted-foreground'}`}
+                  className={`text-lg font-black tracking-tight ${achievement.unlocked ? 'text-foreground' : 'text-muted-foreground'}`}
                 >
                   {achievement.title}
                 </h4>
@@ -514,15 +514,15 @@ function NotesHistory({ sessions }: { sessions: StudySession[] }) {
       {sessionsWithNotes.map((session) => (
         <Card
           key={session.id}
-          className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden group hover:bg-card/60 transition-all'
+          className='border-none bg-card/40 backdrop-blur-md shadow-2xl rounded-[2rem] overflow-hidden group hover:bg-card/60 transition-all border border-primary/5'
         >
-          <CardHeader className='bg-primary/5 py-4 px-8 border-b border-white/5'>
+          <CardHeader className='bg-primary/5 py-4 px-8 border-b border-primary/10'>
             <div className='flex justify-between items-center'>
               <div className='space-y-0.5'>
                 <p className='text-[10px] uppercase font-bold tracking-[0.2em] text-primary/80'>
                   Curso
                 </p>
-                <CardTitle className='text-lg font-black text-white'>
+                <CardTitle className='text-lg font-black text-foreground'>
                   {session.courseName}
                 </CardTitle>
               </div>

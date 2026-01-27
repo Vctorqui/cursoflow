@@ -28,9 +28,9 @@ export function Header({
 }: HeaderProps) {
   return (
     <header className='border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
-      <div className='container mx-auto px-4 h-16 flex items-center justify-between gap-4'>
-        <div className='flex items-center gap-2'>
-          <h1 className='text-2xl font-serif font-bold text-primary'>
+      <div className='container mx-auto px-4 h-16 flex items-center justify-between gap-2 md:gap-4'>
+        <div className='flex items-center gap-2 flex-shrink-0'>
+          <h1 className='text-xl md:text-2xl font-serif font-bold text-primary'>
             CursoFlow
           </h1>
           <p className='hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest'>
@@ -38,7 +38,7 @@ export function Header({
           </p>
         </div>
 
-        <div className='flex-1 max-w-md mx-4 hidden md:block'>
+        <div className='flex-1 max-w-md mx-2 hidden md:block'>
           <div className='relative'>
             <Plus className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground' />
             <input
@@ -51,20 +51,24 @@ export function Header({
           </div>
         </div>
 
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-1 md:gap-2'>
           <ThemeCustomizer />
           <ThemeToggle />
-          <BackupActions
-            courses={courses}
-            sessions={sessions}
-            onImport={onImport}
-          />
+          <div className='hidden sm:block'>
+            <BackupActions
+              courses={courses}
+              sessions={sessions}
+              onImport={onImport}
+            />
+          </div>
           <Button
             onClick={onNewCourse}
             disabled={isTimerRunning}
-            className='rounded-full bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all font-semibold'
+            size='sm'
+            className='rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all font-semibold px-3 md:px-4'
           >
-            <Plus className='w-4 h-4 mr-2' /> <span>Nuevo Curso</span>
+            <Plus className='w-4 h-4 md:mr-2' />{' '}
+            <span className='hidden md:inline'>Nuevo Curso</span>
           </Button>
         </div>
       </div>

@@ -55,7 +55,7 @@ export function CourseCard({
       whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl hover:bg-card/60 transition-all duration-300 rounded-[2rem] overflow-hidden group'>
+      <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl hover:bg-card/60 transition-all duration-300 rounded-[2rem] overflow-hidden group border border-primary/5'>
         <CardHeader className='pb-4'>
           <div className='flex items-start justify-between gap-4'>
             <div className='space-y-1'>
@@ -65,7 +65,7 @@ export function CourseCard({
                 </CardTitle>
                 <Badge
                   variant='secondary'
-                  className='bg-white/5 text-muted-foreground border-none px-2 py-0 text-[10px] uppercase font-bold tracking-widest'
+                  className='bg-primary/10 text-primary border-none px-2 py-0 text-[10px] uppercase font-bold tracking-widest'
                 >
                   {course.duration}W
                 </Badge>
@@ -74,7 +74,7 @@ export function CourseCard({
                 {course.description}
               </CardDescription>
             </div>
-            <div className='flex gap-1 items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm'>
+            <div className='flex gap-1 items-center bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-primary/10'>
               <ActionIcon
                 icon={Eye}
                 label='Ver detalles'
@@ -104,24 +104,24 @@ export function CourseCard({
                 {course.progress}%
               </span>
             </div>
-            <div className='h-1.5 w-full bg-white/5 rounded-full overflow-hidden'>
+            <div className='h-1.5 w-full bg-primary/10 rounded-full overflow-hidden'>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${course.progress}%` }}
-                className='h-full bg-primary shadow-[0_0_15px_rgba(255,122,33,0.5)]'
+                className='h-full bg-primary shadow-[0_0_15px_rgba(255,122,33,0.3)]'
               />
             </div>
           </div>
 
           <div className='flex items-center gap-6 py-2'>
-            <div className='flex items-center gap-2.5 bg-white/5 px-3 py-2 rounded-2xl'>
+            <div className='flex items-center gap-2.5 bg-primary/5 px-3 py-2 rounded-2xl border border-primary/10'>
               <Target className='w-4 h-4 text-primary' />
               <span className='text-sm font-semibold'>
                 {course.frequency}x/sem
               </span>
             </div>
-            <div className='flex items-center gap-2.5 bg-white/5 px-3 py-2 rounded-2xl'>
-              <Clock className='w-4 h-4 text-[#ff9f43]' />
+            <div className='flex items-center gap-2.5 bg-primary/5 px-3 py-2 rounded-2xl border border-primary/10'>
+              <Clock className='w-4 h-4 text-primary' />
               <span className='text-sm font-semibold'>
                 {course.sessionsCompleted}/{course.totalSessions}
               </span>
@@ -129,7 +129,7 @@ export function CourseCard({
           </div>
 
           {course.schedule && (
-            <div className='flex items-center gap-3 bg-black/30 p-4 rounded-2xl border border-white/5'>
+            <div className='flex items-center gap-3 bg-muted/30 p-4 rounded-2xl border border-primary/10'>
               <div className='w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center'>
                 <Calendar className='w-5 h-5 text-primary' />
               </div>

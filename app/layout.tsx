@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   title: 'CursoFlow - Tu Compañero de Estudio',
   description:
     'Mantén la constancia en tus cursos con organización, motivación y seguimiento',
-  generator: 'v0.app',
+  generator: 'CursoFlow v0.2.0',
 }
 
 export default function RootLayout({

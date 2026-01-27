@@ -65,10 +65,10 @@ export function CourseForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-[500px] border-none bg-card/60 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2.5rem] p-8 overflow-hidden'>
+      <DialogContent className='sm:max-w-[500px] border border-primary/10 bg-card/80 backdrop-blur-2xl shadow-2xl rounded-[2.5rem] p-8 overflow-hidden'>
         <div className='absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -z-10 rounded-full' />
         <DialogHeader className='space-y-2 mb-4'>
-          <DialogTitle className='text-3xl font-black tracking-tight text-white'>
+          <DialogTitle className='text-3xl font-black tracking-tight text-foreground'>
             {title}
           </DialogTitle>
           <DialogDescription className='text-muted-foreground/60 font-medium uppercase text-[10px] tracking-[0.2em]'>
@@ -86,7 +86,7 @@ export function CourseForm({
             <Input
               id='name'
               placeholder='Ej: Master en React 2024'
-              className='h-14 bg-black/40 border-white/5 rounded-2xl focus:ring-primary/50 text-white font-medium'
+              className='h-14 bg-muted/50 border-primary/10 rounded-2xl focus:ring-primary/50 text-foreground font-medium placeholder:text-muted-foreground/50'
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -104,7 +104,7 @@ export function CourseForm({
             <Textarea
               id='description'
               placeholder='¿De qué trata este curso?'
-              className='min-h-[100px] bg-black/40 border-white/5 rounded-2xl focus:ring-primary/50 text-white font-medium resize-none'
+              className='min-h-[100px] bg-muted/50 border-primary/10 rounded-2xl focus:ring-primary/50 text-foreground font-medium resize-none placeholder:text-muted-foreground/50'
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
@@ -122,7 +122,7 @@ export function CourseForm({
               <Input
                 id='duration'
                 type='number'
-                className='h-14 bg-black/40 border-white/5 rounded-2xl focus:ring-primary/50 text-white font-medium'
+                className='h-14 bg-muted/50 border-primary/10 rounded-2xl focus:ring-primary/50 text-foreground font-medium'
                 value={formData.duration}
                 onChange={(e) =>
                   setFormData({ ...formData, duration: e.target.value })
@@ -140,7 +140,7 @@ export function CourseForm({
               <Input
                 id='frequency'
                 type='number'
-                className='h-14 bg-black/40 border-white/5 rounded-2xl focus:ring-primary/50 text-white font-medium'
+                className='h-14 bg-muted/50 border-primary/10 rounded-2xl focus:ring-primary/50 text-foreground font-medium'
                 value={formData.frequency}
                 onChange={(e) =>
                   setFormData({ ...formData, frequency: e.target.value })
@@ -159,7 +159,7 @@ export function CourseForm({
             <Input
               id='schedule'
               placeholder='Ej: Lunes y Miércoles 09:00 - 10:30'
-              className='h-14 bg-black/40 border-white/5 rounded-2xl focus:ring-primary/50 text-white font-medium'
+              className='h-14 bg-muted/50 border-primary/10 rounded-2xl focus:ring-primary/50 text-foreground font-medium placeholder:text-muted-foreground/50'
               value={formData.schedule}
               onChange={(e) =>
                 setFormData({ ...formData, schedule: e.target.value })
@@ -169,7 +169,7 @@ export function CourseForm({
           <div className='pt-2'>
             <Button
               type='submit'
-              className='w-full h-16 bg-primary hover:bg-primary/90 text-white font-black rounded-2xl text-lg shadow-xl shadow-primary/20 transition-all active:scale-95'
+              className='w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-2xl text-lg shadow-xl shadow-primary/20 transition-all active:scale-95'
             >
               {initialData ? 'Actualizar Datos' : 'Registrar Curso'}
             </Button>

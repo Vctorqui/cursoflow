@@ -154,19 +154,23 @@ export default function CursoFlowApp() {
                   duration,
                   notes,
                 )
+                const currentCourse = courses.find(
+                  (c) => c.id === selectedCourse.id,
+                )
+                if (currentCourse) {
+                  const sessionsCompleted = currentCourse.sessionsCompleted
+                  const totalNeeded = currentCourse.totalSessions
 
-                // Celebration logic: check if this session completes the course
-                const completedSessionsCount =
-                  studySessions.filter(
-                    (s) => s.courseId === selectedCourse.id && s.completed,
-                  ).length + 1
-
-                if (completedSessionsCount >= selectedCourse.totalSessions) {
-                  confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                  })
+                  if (sessionsCompleted + 1 >= totalNeeded && totalNeeded > 0) {
+                    setTimeout(() => {
+                      confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        zIndex: 9999,
+                      })
+                    }, 300)
+                  }
                 }
               }
             }}
