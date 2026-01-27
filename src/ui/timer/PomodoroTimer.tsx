@@ -25,6 +25,7 @@ import {
   VolumeX,
 } from 'lucide-react'
 import { MotivationalMessages } from '../motivation/MotivationalMessages'
+import { Input } from '../common/ui/input'
 
 interface PomodoroTimerProps {
   onSessionComplete?: (duration: number, notes?: string) => void
@@ -107,8 +108,6 @@ export function PomodoroTimer({
 
     setIsRunning(false)
     setIsCompleted(true)
-
-    // Defer parent state updates to the next tick to avoid React render warnings
     setTimeout(() => {
       onTimerPause?.()
     }, 0)
@@ -168,7 +167,7 @@ export function PomodoroTimer({
             {isCompleted ? '¡Sesión Finalizada!' : 'Enfoque de Estudio'}
           </CardTitle>
           {courseName && (
-            <div className='mt-2 inline-flex items-center gap-2 bg-white/5 px-4 py-1.5 rounded-full border border-white/5'>
+            <div className='mt-2 inline-flex items-center gap-2 bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10'>
               <span className='w-2 h-2 rounded-full bg-primary animate-pulse' />
               <p className='text-xs font-bold uppercase tracking-widest text-muted-foreground'>
                 {isCompleted ? 'Curso: ' : 'Estudiando: '}
@@ -238,34 +237,80 @@ function DurationSelector({
   isRunning: boolean
   onDurationChange: (val: number) => void
 }) {
+  const [isCustom, setIsCustom] = useState(false)
+  const PRESETS = [5, 10, 15, 25, 30, 45, 60, 90, 120]
+
   return (
     <div className='space-y-3'>
-      <label className='text-[10px] uppercase font-bold tracking-widest text-muted-foreground'>
-        Duración del Bloque
-      </label>
-      <Select
-        value={duration.toString()}
-        onValueChange={(val) => onDurationChange(parseInt(val))}
-        disabled={isRunning}
-      >
-        <SelectTrigger
-          className='rounded-2xl bg-white/5 border-white/5 h-12 font-semibold transition-all hover:bg-white/10'
-          aria-label={`Seleccionar duración. Actual: ${duration} min`}
+      <div className='flex items-center justify-between'>
+        <label className='text-[10px] uppercase font-black tracking-widest text-muted-foreground pl-1'>
+          Duración del Bloque
+        </label>
+        {isCustom && (
+          <button
+            onClick={() => {
+              setIsCustom(false)
+              onDurationChange(25)
+            }}
+            className='text-[10px] font-bold text-primary hover:underline transition-all'
+          >
+            Volver a ajustes
+          </button>
+        )}
+      </div>
+
+      {!isCustom ? (
+        <Select
+          value={duration.toString()}
+          onValueChange={(val) => {
+            if (val === 'custom') {
+              setIsCustom(true)
+            } else {
+              onDurationChange(parseInt(val))
+            }
+          }}
+          disabled={isRunning}
         >
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent className='bg-card/95 backdrop-blur-xl border-white/10 rounded-2xl'>
-          {[5, 10, 15, 25, 30, 45, 60, 90, 120].map((v) => (
+          <SelectTrigger
+            className='rounded-2xl bg-primary/5 border-primary/10 h-12 font-semibold transition-all hover:bg-primary/10'
+            aria-label={`Seleccionar duración. Actual: ${duration} min`}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className='bg-card/95 backdrop-blur-xl border-primary/10 rounded-2xl'>
+            {PRESETS.map((v) => (
+              <SelectItem
+                key={v}
+                value={v.toString()}
+                className='rounded-xl focus:bg-primary/20 focus:text-primary'
+              >
+                {v} minutos {v === 25 ? '🎯' : ''}
+              </SelectItem>
+            ))}
             <SelectItem
-              key={v}
-              value={v.toString()}
-              className='rounded-xl focus:bg-primary/20 focus:text-primary'
+              value='custom'
+              className='rounded-xl focus:bg-primary/20 focus:text-primary font-bold'
             >
-              {v} minutos {v === 25 ? '🎯' : ''}
+              ⏱️ Personalizado...
             </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+          </SelectContent>
+        </Select>
+      ) : (
+        <div className='relative'>
+          <Input
+            type='number'
+            min='1'
+            max='480'
+            value={duration}
+            onChange={(e) => onDurationChange(parseInt(e.target.value) || 1)}
+            disabled={isRunning}
+            className='h-12 rounded-2xl bg-primary/5 border-primary/10 pl-4 pr-12 font-bold focus:ring-primary/30 transition-all'
+          />
+          <div className='absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground uppercase tracking-widest pointer-events-none'>
+            min
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -352,7 +397,7 @@ function TimerControls({
         <Button
           onClick={onPause}
           variant='ghost'
-          className='h-16 px-10 rounded-[2rem] bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md active:scale-95 text-lg font-bold gap-3'
+          className='h-16 px-10 rounded-[2rem] bg-primary/5 hover:bg-primary/10 border border-primary/10 backdrop-blur-md active:scale-95 text-lg font-bold gap-3'
         >
           <Pause className='w-6 h-6 fill-current' /> Pausar
         </Button>
@@ -360,7 +405,7 @@ function TimerControls({
       <Button
         onClick={onReset}
         variant='ghost'
-        className='w-16 h-16 rounded-[2rem] bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md active:scale-95 p-0 flex items-center justify-center'
+        className='w-16 h-16 rounded-[2rem] bg-primary/5 hover:bg-primary/10 border border-primary/10 backdrop-blur-md active:scale-95 p-0 flex items-center justify-center'
         disabled={timeLeft === duration * 60 && !isRunning}
       >
         <RotateCcw className='w-6 h-6' />
@@ -404,7 +449,7 @@ function CompletionMessage({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder='¿Qué aprendiste hoy? (Opcional)'
-          className='w-full min-h-[120px] p-5 text-sm rounded-[1.5rem] bg-black/40 border border-white/5 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none transition-all placeholder:text-muted-foreground/40 font-medium'
+          className='w-full min-h-[120px] p-5 text-sm rounded-[1.5rem] bg-muted/50 border border-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none transition-all placeholder:text-muted-foreground/40 font-medium'
         />
       </div>
 
@@ -419,13 +464,13 @@ function CompletionMessage({
           onClick={onCancel}
           variant='ghost'
           size='sm'
-          className='h-12 rounded-[1.5rem] text-muted-foreground hover:text-white transition-colors'
+          className='h-12 rounded-[1.5rem] text-muted-foreground hover:text-primary transition-colors'
         >
           Descartar registro
         </Button>
       </div>
 
-      <div className='pt-6 border-t border-white/5'>
+      <div className='pt-6 border-t border-primary/10'>
         <p className='text-[10px] font-bold text-muted-foreground/60 flex items-center justify-center gap-2'>
           <Clock className='w-3 h-3' /> RECOMENDACIÓN: TÓMATE 10 MIN DE DESCANSO
         </p>
