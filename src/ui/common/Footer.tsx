@@ -21,7 +21,7 @@ const Footer = () => {
             </div>
             <div className='text-center md:text-right'>
               <p className='text-xs text-muted-foreground'>
-                CursoFlow v0.1.0 - Tu compañero de estudio constante
+                CursoFlow v0.2.0 - Tu compañero de estudio constante
               </p>
             </div>
           </div>

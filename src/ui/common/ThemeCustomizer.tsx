@@ -41,13 +41,13 @@ export function ThemeCustomizer() {
         <Button
           variant='ghost'
           size='icon'
-          className='w-9 h-9 rounded-full bg-white/5 border border-white/5 hover:bg-white/10'
+          className='w-9 h-9 rounded-full bg-muted border border-border hover:bg-muted/80'
           aria-label='Personalizar tema'
         >
-          <Palette className='w-4 h-4' />
+          <Palette className='w-4 h-4 text-foreground' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-64 p-4 border-white/10 bg-card/95 backdrop-blur-xl rounded-3xl'>
+      <PopoverContent className='w-64 p-4 border-primary/10 bg-card/95 backdrop-blur-xl rounded-3xl'>
         <div className='space-y-4'>
           <div className='space-y-1.5'>
             <h4 className='text-xs font-black uppercase tracking-widest text-muted-foreground pl-1'>
@@ -58,7 +58,7 @@ export function ThemeCustomizer() {
                 <button
                   key={color.name}
                   onClick={() => handleColorChange(color.value)}
-                  className='relative w-8 h-8 rounded-full border border-white/10 transition-transform active:scale-90 flex items-center justify-center overflow-hidden'
+                  className='relative w-8 h-8 rounded-full border border-primary/10 transition-transform active:scale-90 flex items-center justify-center overflow-hidden'
                   style={{ backgroundColor: color.hex }}
                   title={color.name}
                 >
