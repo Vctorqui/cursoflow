@@ -4,21 +4,13 @@ import { Playfair_Display, Source_Sans_3 } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/src/ui/common/ui/toaster'
 import { ThemeProvider } from '@/src/ui/common/theme-provider'
+import { getThemeBootstrapInlineScript } from '@/src/lib/themeSurface'
 
 function ThemeScript() {
   return (
     <script
       dangerouslySetInnerHTML={{
-        __html: `
-          (function() {
-            try {
-              var color = localStorage.getItem('cursoflow-primary-color');
-              if (color) {
-                document.documentElement.style.setProperty('--primary', color);
-              }
-            } catch (e) {}
-          })();
-        `,
+        __html: getThemeBootstrapInlineScript(),
       }}
     />
   )
