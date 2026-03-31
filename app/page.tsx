@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Tabs, TabsContent, TabsList } from '@/src/ui/common/ui/tabs'
 import { BookOpen, TrendingUp, Heart, Timer } from 'lucide-react'
 
 import { useCourses } from '@/src/application/useCourses'
 import { useStudyFocus } from '@/src/application/useStudyFocus'
 import { Course, CourseInputData } from '@/src/domain/entities'
+import { collectAllTagsFromCourses } from '@/src/domain/tags'
+import { cn } from '@/src/lib/utils'
 
 import { CourseCard } from '@/src/ui/courses/CourseCard'
+import { CourseDetailDialog } from '@/src/ui/courses/CourseDetailDialog'
 import { CourseForm } from '@/src/ui/courses/CourseForm'
 import { ProgressTracking } from '@/src/ui/progress/ProgressTracking'
 import { MotivationalMessages } from '@/src/ui/motivation/MotivationalMessages'
@@ -45,13 +48,35 @@ export default function CursoFlowApp() {
 
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [editingCourse, setEditingCourse] = useState<Course | null>(null)
+  const [detailCourse, setDetailCourse] = useState<Course | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
-
-  const filteredCourses = courses.filter(
-    (course) =>
-      course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  const [selectedCourseTag, setSelectedCourseTag] = useState<string | null>(
+    null,
   )
+
+  const courseTagOptions = useMemo(
+    () => collectAllTagsFromCourses(courses),
+    [courses],
+  )
+
+  const filteredCourses = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    return courses.filter((course) => {
+      const textMatch =
+        !q ||
+        course.name.toLowerCase().includes(q) ||
+        course.description.toLowerCase().includes(q) ||
+        (course.tags ?? []).some((t) => t.toLowerCase().includes(q))
+
+      const tagMatch =
+        !selectedCourseTag ||
+        (course.tags ?? []).some(
+          (t) => t.toLowerCase() === selectedCourseTag.toLowerCase(),
+        )
+
+      return textMatch && tagMatch
+    })
+  }, [courses, searchQuery, selectedCourseTag])
 
   const handleAddOrUpdate = (data: CourseInputData) => {
     if (editingCourse) {
@@ -125,15 +150,64 @@ export default function CursoFlowApp() {
           {courses.length === 0 ? (
             <EmptyCourses onAdd={() => setShowCreateModal(true)} />
           ) : (
+            <>
+              {courseTagOptions.length > 0 ? (
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4'>
+                  <span className='shrink-0 text-[10px] font-black tracking-widest text-muted-foreground uppercase'>
+                    Etiquetas
+                  </span>
+                  <div className='flex flex-wrap gap-2'>
+                    <button
+                      type='button'
+                      onClick={() => setSelectedCourseTag(null)}
+                      className={cn(
+                        'rounded-full border px-4 py-1.5 text-xs font-bold transition',
+                        selectedCourseTag === null
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-primary/15 bg-muted/40 text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                      )}
+                    >
+                      Todos
+                    </button>
+                    {courseTagOptions.map((tag) => {
+                      const selected =
+                        selectedCourseTag !== null &&
+                        tag.toLowerCase() ===
+                          selectedCourseTag.toLowerCase()
+                      return (
+                        <button
+                          key={tag}
+                          type='button'
+                          onClick={() =>
+                            setSelectedCourseTag(selected ? null : tag)
+                          }
+                          className={cn(
+                            'rounded-full border px-4 py-1.5 text-xs font-bold transition',
+                            selected
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'border-primary/15 bg-muted/40 text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                          )}
+                        >
+                          {tag}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              ) : null}
+              {filteredCourses.length === 0 ? (
+                <div className='rounded-4xl border border-primary/10 bg-card/30 py-16 text-center'>
+                  <p className='text-sm font-medium text-muted-foreground'>
+                    Ningún curso coincide con el filtro o la búsqueda.
+                  </p>
+                </div>
+              ) : (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
               {filteredCourses.map((course) => (
                 <CourseCard
                   key={course.id}
                   course={course}
-                  onShow={(c) => {
-                    setEditingCourse(c)
-                    setShowCreateModal(true)
-                  }}
+                  onShow={(c) => setDetailCourse(c)}
                   onEdit={(c) => {
                     setEditingCourse(c)
                     setShowCreateModal(true)
@@ -144,6 +218,8 @@ export default function CursoFlowApp() {
                 />
               ))}
             </div>
+              )}
+            </>
           )}
         </TabsContent>
 
@@ -153,13 +229,18 @@ export default function CursoFlowApp() {
             selectedCourse={selectedCourse}
             setSelectedCourse={setSelectedCourse}
             isTimerRunning={isTimerRunning}
-            onSessionComplete={(duration: number, notes?: string) => {
+            onSessionComplete={(
+              duration: number,
+              notes?: string,
+              sessionTags?: string[],
+            ) => {
               if (selectedCourse) {
                 addSession(
                   selectedCourse.id,
                   selectedCourse.name,
                   duration,
                   notes,
+                  sessionTags,
                 )
                 const currentCourse = courses.find(
                   (c) => c.id === selectedCourse.id,
@@ -196,12 +277,21 @@ export default function CursoFlowApp() {
         </TabsContent>
       </Tabs>
 
+      <CourseDetailDialog
+        course={detailCourse}
+        open={detailCourse !== null}
+        onOpenChange={(open) => {
+          if (!open) setDetailCourse(null)
+        }}
+      />
+
       <CourseForm
         open={showCreateModal}
         onOpenChange={handleCourseFormOpenChange}
         onSubmit={handleAddOrUpdate}
         initialData={editingCourse}
         title={editingCourse ? 'Editar Curso' : 'Registrar Nuevo Curso'}
+        tagSuggestions={collectAllTagsFromCourses(courses)}
       />
     </AppLayout>
   )

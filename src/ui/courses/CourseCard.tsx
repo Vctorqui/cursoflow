@@ -9,11 +9,9 @@ import {
 } from '@/src/ui/common/ui/card'
 import { Button } from '@/src/ui/common/ui/button'
 import { Badge } from '@/src/ui/common/ui/badge'
-import { Progress } from '@/src/ui/common/ui/progress'
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/src/ui/common/ui/tooltip'
 import {
@@ -57,24 +55,40 @@ export function CourseCard({
     >
       <Card className='border-none bg-card/40 backdrop-blur-md shadow-2xl hover:bg-card/60 transition-all duration-300 rounded-[2rem] overflow-hidden group border border-primary/5'>
         <CardHeader className='pb-4'>
-          <div className='flex items-start justify-between gap-4'>
-            <div className='space-y-1'>
-              <div className='flex items-center gap-2'>
-                <CardTitle className='text-2xl font-bold tracking-tight'>
+          <div className='flex w-full min-w-0 items-start justify-between gap-3'>
+            <div className='min-w-0 flex-1 space-y-1'>
+              <div className='flex min-w-0 items-start gap-2'>
+                <CardTitle
+                  title={course.name}
+                  className='min-w-0 flex-1 overflow-hidden text-2xl font-bold tracking-tight break-all line-clamp-2'
+                >
                   {course.name}
                 </CardTitle>
                 <Badge
                   variant='secondary'
-                  className='bg-primary/10 text-primary border-none px-2 py-0 text-[10px] uppercase font-bold tracking-widest'
+                  className='shrink-0 self-start bg-primary/10 text-primary border-none px-2 py-0 text-[10px] uppercase font-bold tracking-widest'
                 >
                   {course.duration}W
                 </Badge>
               </div>
-              <CardDescription className='text-sm text-muted-foreground leading-relaxed line-clamp-1'>
+              <CardDescription className='line-clamp-2 text-sm leading-relaxed wrap-break-word text-muted-foreground'>
                 {course.description}
               </CardDescription>
+              {(course.tags?.length ?? 0) > 0 ? (
+                <div className='flex flex-wrap gap-1.5 pt-2'>
+                  {(course.tags ?? []).map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant='outline'
+                      className='rounded-full border-primary/25 bg-primary/5 px-2.5 py-0 text-[10px] font-bold uppercase tracking-wide text-primary'
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              ) : null}
             </div>
-            <div className='flex gap-1 items-center bg-muted/50 p-1 rounded-xl backdrop-blur-sm border border-primary/10'>
+            <div className='flex shrink-0 gap-1 self-start items-center rounded-xl border border-primary/10 bg-muted/50 p-1 backdrop-blur-sm'>
               <ActionIcon
                 icon={Eye}
                 label='Ver detalles'
@@ -137,7 +151,7 @@ export function CourseCard({
                 <p className='text-[10px] uppercase font-bold tracking-widest text-muted-foreground'>
                   Horario
                 </p>
-                <p className='text-xs font-semibold uppercase'>
+                <p className='line-clamp-2 text-xs font-semibold wrap-break-word uppercase'>
                   {course.schedule}
                 </p>
               </div>

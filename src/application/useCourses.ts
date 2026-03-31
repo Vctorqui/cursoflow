@@ -5,6 +5,7 @@ import {
   CourseRepository,
   CourseInputData,
 } from '../domain/entities'
+import { normalizeTags } from '../domain/tags'
 import { LocalStorageCourseRepository } from '../infrastructure/repositories'
 import { useToast } from '@/src/hooks/use-toast'
 
@@ -75,6 +76,7 @@ export function useCourses() {
       duration,
       frequency,
       schedule: newCourseData.schedule,
+      tags: normalizeTags(newCourseData.tags),
       progress: 0,
       sessionsCompleted: 0,
       totalSessions: duration * frequency,
@@ -106,7 +108,10 @@ export function useCourses() {
 
         return {
           ...c,
-          ...updatedData,
+          name: updatedData.name,
+          description: updatedData.description,
+          schedule: updatedData.schedule,
+          tags: normalizeTags(updatedData.tags),
           duration: newDuration,
           frequency: newFrequency,
           totalSessions: newDuration * newFrequency,
@@ -136,6 +141,7 @@ export function useCourses() {
     courseName: string,
     duration: number,
     notes?: string,
+    sessionTags?: string[],
   ) => {
     const newSession: StudySession = {
       id: Date.now().toString(),
@@ -145,6 +151,8 @@ export function useCourses() {
       duration,
       completed: true,
       notes,
+      tags:
+        sessionTags !== undefined ? normalizeTags(sessionTags) : undefined,
     }
     setStudySessions((prev: StudySession[]) => [...prev, newSession])
   }
