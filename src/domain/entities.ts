@@ -27,6 +27,32 @@ export const StudySessionSchema = z.object({
 
 export type StudySession = z.infer<typeof StudySessionSchema>
 
+/** Form + local validation; name matches CourseSchema (min 1, no max). */
+export const courseFormInputSchema = z.object({
+  name: z
+    .string()
+    .transform((s) => s.trim())
+    .pipe(z.string().min(1, 'El nombre es obligatorio')),
+  description: z.string(),
+  duration: z
+    .string()
+    .min(1, 'Indica la duración en semanas')
+    .refine((v) => {
+      const n = Number(v)
+      return Number.isFinite(n) && n > 0
+    }, 'La duración debe ser un número mayor que 0'),
+  frequency: z
+    .string()
+    .min(1, 'Indica las sesiones por semana')
+    .refine((v) => {
+      const n = Number(v)
+      return Number.isFinite(n) && n > 0
+    }, 'Las sesiones deben ser un número mayor que 0'),
+  schedule: z.string(),
+})
+
+export type CourseFormValues = z.infer<typeof courseFormInputSchema>
+
 export interface CourseInputData {
   name: string
   description: string
