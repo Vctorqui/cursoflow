@@ -62,6 +62,13 @@ export default function CursoFlowApp() {
     }
   }
 
+  const handleCourseFormOpenChange = (open: boolean) => {
+    setShowCreateModal(open)
+    if (!open) {
+      setEditingCourse(null)
+    }
+  }
+
   const addCourseToGoogleCalendar = (course: Course) => {
     const startDate = new Date()
     const endDate = new Date()
@@ -191,7 +198,7 @@ export default function CursoFlowApp() {
 
       <CourseForm
         open={showCreateModal}
-        onOpenChange={setShowCreateModal}
+        onOpenChange={handleCourseFormOpenChange}
         onSubmit={handleAddOrUpdate}
         initialData={editingCourse}
         title={editingCourse ? 'Editar Curso' : 'Registrar Nuevo Curso'}

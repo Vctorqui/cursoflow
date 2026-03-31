@@ -29,11 +29,11 @@ export function Header({
   return (
     <header className='border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
       <div className='container mx-auto px-4 h-16 flex items-center justify-between gap-2 md:gap-4'>
-        <div className='flex items-center gap-2 flex-shrink-0'>
+        <div className='flex items-center flex-col lex-shrink-0'>
           <h1 className='text-xl md:text-2xl font-serif font-bold text-primary'>
             CursoFlow
           </h1>
-          <p className='hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest'>
+          <p className='hidden lg:block text-xs text-muted-foreground tracking-wider'>
             Tu compañero de estudio
           </p>
         </div>

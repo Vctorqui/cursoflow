@@ -55,11 +55,11 @@ export function MotivationalMessages({
       <Card className='border-none bg-gradient-to-r from-[#2d0b5e] via-[#4a148c] to-[#2d0b5e] shadow-2xl relative overflow-hidden'>
         <div className='absolute inset-0 bg-black/20' />
         <CardContent className='p-8 relative z-10'>
-          <div className='flex items-center gap-6'>
+          <div className='flex md:flex-row items-center gap-6 flex-col'>
             <QuoteIcon size='w-14 h-14' iconSize='w-7 h-7' />
             <div className='flex-1 space-y-4'>
               <div className='space-y-1'>
-                <p className='text-3xl font-serif font-medium leading-tight text-white italic'>
+                <p className='text-xl md:text-3xl font-serif font-medium leading-tight text-white italic'>
                   &quot;{currentMessage}&quot;
                 </p>
                 <div className='flex items-center gap-2'>
