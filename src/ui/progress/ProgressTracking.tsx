@@ -166,7 +166,7 @@ export function ProgressTracking({ courses, sessions }: ProgressTrackingProps) {
         </TabsContent>
 
         <TabsContent value='notes' className='focus:outline-none'>
-          <NotesHistory sessions={sessions} />
+          <NotesHistory sessions={sessions} courses={courses} />
         </TabsContent>
 
         <TabsContent value='achievements' className='focus:outline-none'>

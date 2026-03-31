@@ -17,11 +17,13 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/src/ui/common/ui/form'
+import { TagPicker } from '@/src/ui/common/TagPicker'
 
 import {
   Course,
@@ -29,6 +31,7 @@ import {
   courseFormInputSchema,
   type CourseFormValues,
 } from '../../domain/entities'
+import { normalizeTags } from '../../domain/tags'
 
 interface CourseFormProps {
   open: boolean
@@ -36,6 +39,8 @@ interface CourseFormProps {
   onSubmit: (data: CourseInputData) => void
   initialData?: Course | null
   title: string
+  /** Etiquetas ya usadas en otros cursos (sugerencias al crear/editar). */
+  tagSuggestions: string[]
 }
 
 function toCourseInputData(values: CourseFormValues): CourseInputData {
@@ -45,6 +50,7 @@ function toCourseInputData(values: CourseFormValues): CourseInputData {
     duration: values.duration,
     frequency: values.frequency,
     schedule: values.schedule.trim() ? values.schedule.trim() : undefined,
+    tags: normalizeTags(values.tags),
   }
 }
 
@@ -54,6 +60,7 @@ export function CourseForm({
   onSubmit,
   initialData,
   title,
+  tagSuggestions,
 }: CourseFormProps) {
   const form = useForm<CourseFormValues>({
     resolver: zodResolver(courseFormInputSchema),
@@ -63,6 +70,7 @@ export function CourseForm({
       duration: '',
       frequency: '',
       schedule: '',
+      tags: [],
     },
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -74,6 +82,7 @@ export function CourseForm({
     duration: '',
     frequency: '',
     schedule: '',
+    tags: [],
   }
 
   useEffect(() => {
@@ -89,6 +98,7 @@ export function CourseForm({
             duration: initialData.duration.toString(),
             frequency: initialData.frequency.toString(),
             schedule: initialData.schedule ?? '',
+            tags: initialData.tags ?? [],
           }
         : emptyValues,
     )
@@ -157,6 +167,28 @@ export function CourseForm({
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='tags'
+                  render={({ field }) => (
+                    <FormItem className='space-y-2'>
+                      <FormControl>
+                        <TagPicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          suggestions={tagSuggestions}
+                          label='Etiquetas (opcional)'
+                          placeholder='Ej: React, Examen, Urgente…'
+                        />
+                      </FormControl>
+                      <FormDescription className='pl-1 text-[11px] leading-snug'>
+                        Una o varias etiquetas como badges. Podrás filtrar
+                        cursos aquí y notas en Progreso → Notas.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
+import { applyStoredCursoflowTheme } from '@/src/lib/themeSurface'
 
 export function ThemeInitializer() {
   useEffect(() => {
-    const savedColor = localStorage.getItem('cursoflow-primary-color')
-    if (savedColor) {
-      document.documentElement.style.setProperty('--primary', savedColor)
-    }
+    applyStoredCursoflowTheme()
   }, [])
 
   return null

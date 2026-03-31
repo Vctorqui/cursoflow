@@ -7,6 +7,8 @@ export const CourseSchema = z.object({
   duration: z.number().positive(),
   frequency: z.number().positive(),
   schedule: z.string().optional(),
+  /** Etiquetas del curso; ausente en datos antiguos = sin etiquetas */
+  tags: z.array(z.string()).optional(),
   progress: z.number().min(0).max(100),
   sessionsCompleted: z.number().min(0),
   totalSessions: z.number().min(1),
@@ -23,6 +25,8 @@ export const StudySessionSchema = z.object({
   duration: z.number().positive(),
   completed: z.boolean(),
   notes: z.string().optional(),
+  /** Etiquetas de la nota de sesión; si falta, en UI se usan las del curso */
+  tags: z.array(z.string()).optional(),
 })
 
 export type StudySession = z.infer<typeof StudySessionSchema>
@@ -49,6 +53,7 @@ export const courseFormInputSchema = z.object({
       return Number.isFinite(n) && n > 0
     }, 'Las sesiones deben ser un número mayor que 0'),
   schedule: z.string(),
+  tags: z.array(z.string()).max(15).default([]),
 })
 
 export type CourseFormValues = z.infer<typeof courseFormInputSchema>
@@ -59,6 +64,7 @@ export interface CourseInputData {
   duration: string
   frequency: string
   schedule?: string
+  tags: string[]
 }
 
 export interface CourseRepository {

@@ -17,13 +17,18 @@ import {
 } from '@/src/ui/common/ui/select'
 import { PomodoroTimer } from '@/src/ui/timer/PomodoroTimer'
 import { Course } from '@/src/domain/entities'
+import { collectAllTagsFromCourses } from '@/src/domain/tags'
 
 interface StudyTabProps {
   courses: Course[]
   selectedCourse: Course | null
   setSelectedCourse: (course: Course) => void
   isTimerRunning: boolean
-  onSessionComplete: (duration: number) => void
+  onSessionComplete: (
+    duration: number,
+    notes?: string,
+    sessionTags?: string[],
+  ) => void
   onTimerStart: () => void
   onTimerPause: () => void
   onAddCourse: () => void
@@ -85,6 +90,8 @@ export function StudyTab({
         <PomodoroTimer
           onSessionComplete={onSessionComplete}
           courseName={selectedCourse?.name}
+          courseTags={selectedCourse?.tags ?? []}
+          tagSuggestions={collectAllTagsFromCourses(courses)}
           onTimerStart={onTimerStart}
           onTimerPause={onTimerPause}
         />

@@ -16,8 +16,16 @@ import { TimerControls } from './fragments/TimerControls'
 import { CompletionMessage } from './fragments/CompletionMessage'
 
 interface PomodoroTimerProps {
-  onSessionComplete?: (duration: number, notes?: string) => void
+  onSessionComplete?: (
+    duration: number,
+    notes?: string,
+    sessionTags?: string[],
+  ) => void
   courseName?: string
+  /** Etiquetas del curso activo (precarga en la nota de sesión). */
+  courseTags?: string[]
+  /** Todas las etiquetas de cursos para sugerencias. */
+  tagSuggestions?: string[]
   onTimerStart?: () => void
   onTimerPause?: () => void
 }
@@ -25,6 +33,8 @@ interface PomodoroTimerProps {
 export function PomodoroTimer({
   onSessionComplete,
   courseName,
+  courseTags = [],
+  tagSuggestions = [],
   onTimerStart,
   onTimerPause,
 }: PomodoroTimerProps) {
@@ -202,8 +212,10 @@ export function PomodoroTimer({
           {isCompleted && (
             <CompletionMessage
               duration={duration}
-              onSave={(notes) => {
-                onSessionComplete?.(duration, notes)
+              courseTags={courseTags}
+              tagSuggestions={tagSuggestions}
+              onSave={(notes, sessionTags) => {
+                onSessionComplete?.(duration, notes, sessionTags)
                 handleReset()
               }}
               onCancel={handleReset}
