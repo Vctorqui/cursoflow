@@ -1,113 +1,137 @@
-# 🌊 CursoFlow
+# CursoFlow
 
-![CursoFlow Banner](public/images/banner.png)
+![CursoFlow banner](public/images/banner.png)
 
-> **Empowering your learning journey with focus, structure, and style.**
-
-CursoFlow is a premium study management application designed to help students and lifelong learners organize their courses, track their progress, and maintain deep focus using a state-of-the-art interactive UI.
+**CursoFlow** is a study management app for students and lifelong learners: organize courses, track progress, and stay focused with a Pomodoro timer, analytics, and achievements—wrapped in a dark, glass-style UI.
 
 ---
 
-## ✨ Key Features
+## Table of contents
 
-### ⏳ Smart Focus Mode
-
-Stay in the zone with our integrated **Pomodoro Timer**. Customize your study sessions, track breaks, and receive subtle motivational cues to keep you going.
-
-### 📚 Course Management
-
-Effortlessly organize your academic or personal learning. Create, edit, and categorize courses with a streamlined interface that keeps your syllabus at your fingertips.
-
-### 📈 Progress Analytics
-
-Visualize your growth. Our interactive dashboards show your study consistency, completed milestones, and time distribution across different subjects.
-
-### 🏆 Gamified Achievements
-
-Stay motivated with our rewards system. Unlock achievements as you reach study goals and maintain streaks, turning productivity into a rewarding experience.
-
-### 🎨 Premium Glassmorphism UI
-
-Experience a "Midnight Cyber" aesthetic. A sleek, OLED-black dark theme combined with vibrant orange accents and frosted-glass effects for a truly modern feel.
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Getting started](#getting-started)
+- [Scripts](#scripts)
+- [Project structure](#project-structure)
+- [Design notes](#design-notes)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Components**: [Radix UI](https://www.radix-ui.com/) primitives
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Charts**: [Recharts](https://recharts.org/)
+| Area | What you get |
+|------|----------------|
+| **Focus** | Pomodoro timer for sessions and breaks, with cues to stay on track |
+| **Courses** | Create, edit, and categorize courses in one place |
+| **Analytics** | Dashboards for consistency, milestones, and time by subject |
+| **Achievements** | Goals and streaks to keep motivation high |
+| **UI** | Dark “midnight cyber” theme, glass surfaces, and motion for feedback |
 
 ---
 
-## 🚀 Getting Started
+## Tech stack
+
+| Layer | Choice |
+|--------|--------|
+| Framework | [Next.js](https://nextjs.org/) (App Router) |
+| UI | [React 19](https://react.dev/) |
+| Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
+| Components | [Radix UI](https://www.radix-ui.com/) |
+| Motion | [Framer Motion](https://www.framer.com/motion/) |
+| Icons | [Lucide React](https://lucide.dev/) |
+| Charts | [Recharts](https://recharts.org/) |
+
+Other notable libraries include `zod`, `react-hook-form`, `next-themes`, and `sonner`.
+
+---
+
+## Getting started
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm / npm / yarn
+- **Node.js** 18.18+ or 20+ (recommended for current Next.js)
+- **pnpm**, **npm**, or **yarn**
 
-### Installation
+### Install and run
 
-1. Clone the repository:
+```bash
+git clone https://github.com/Vctorqui/cursoflow.git
+cd cursoflow
+pnpm install   # or: npm install / yarn
+pnpm dev       # or: npm run dev / yarn dev
+```
 
-   ```bash
-   git clone https://github.com/Vctorqui/cursoflow.git
-   ```
+Open [http://localhost:3000](http://localhost:3000).
 
-2. Install dependencies:
+For a production build:
 
-   ```bash
-   pnpm install
-   ```
-
-3. Start the development server:
-
-   ```bash
-   pnpm dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+```bash
+pnpm build
+pnpm start
+```
 
 ---
 
-## 🏗️ Project Structure
+## Scripts
 
-CursoFlow follows a modular and decoupled architecture, separating business logic from UI and technical implementation.
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Development server with hot reload |
+| `pnpm build` | Optimized production build |
+| `pnpm start` | Run the production server (after `build`) |
+| `pnpm lint` | ESLint via Next.js config |
+
+---
+
+## Project structure
+
+Layout follows a layered style: domain and application logic stay separate from UI and infrastructure.
 
 ```text
 cursoflow/
-├── app/                  # Next.js App Router (Pages & Layouts)
-├── public/               # Static assets (Images, Icons)
+├── app/                  # Next.js App Router (routes, layouts)
+├── public/               # Static assets (images, icons)
 └── src/
-    ├── domain/           # Core business entities and rules
-    ├── application/      # Use cases and application orchestration
-    ├── infrastructure/   # Data persistence and external service implementations
-    ├── ui/               # Reusable React components and UI logic
-    ├── hooks/            # Custom React hooks for shared logic
-    └── lib/              # Shared utility functions and helpers
+    ├── domain/           # Entities and core rules
+    ├── application/      # Use cases and orchestration
+    ├── infrastructure/   # Persistence and external adapters
+    ├── ui/               # React components
+    ├── hooks/            # Shared hooks
+    └── lib/              # Utilities and helpers
 ```
 
-### 🗝️ Key Architectural Highlights
-
-- **Domain-Driven**: The core logic resides in `src/domain`, making it independent of any framework.
-- **Application Layer**: Orchestrates how the domain logic is used within the app.
-- **UI & Hooks**: Separation of visual components (`ui`) and stateful logic (`hooks`) for better testability.
+- **Domain** — Framework-agnostic business concepts.
+- **Application** — How domain behavior is composed for the app.
+- **UI / hooks** — Presentation and reusable stateful logic.
 
 ---
 
-## 📐 Design Philosophy
+## Design notes
 
-CursoFlow is built on the principles of **visual clarity** and **uninterrupted flow**.
-
-- **Glassmorphism**: Layered transparency to create depth without clutter.
-- **Cyber Aesthetic**: High-contrast dark mode with neon accents to reduce eye strain and focus attention.
-- **Micro-interactions**: Subtle animations that provide immediate feedback and enhance the premium feel.
+CursoFlow prioritizes **clarity** and **flow**: glass-style layers for depth without noise, high-contrast dark surfaces with accent color, and small animations for feedback.
 
 ---
 
-Created with ❤️ by [Victor Quiñones](https://github.com/Vctorqui)
+## Contributing
+
+Contributions are welcome. A typical flow:
+
+1. **Fork** the repository and create a branch from the default branch (`main` or `dev`, whichever is active for releases).
+2. **Make focused changes** — one logical concern per PR when possible.
+3. **Match the codebase** — follow existing patterns for naming, file layout, and imports; run the linter before opening a PR.
+4. **Test locally** — `pnpm dev` for manual checks; `pnpm build` to ensure the app compiles.
+5. **Open a pull request** with a short description of what changed and why.
+
+If you are unsure about a larger change, open an issue first to align on direction.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+Built with care by [Victor Quiñones](https://github.com/Vctorqui).
